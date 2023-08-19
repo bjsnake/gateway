@@ -1,0 +1,25 @@
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - StripPrefix=1
+        - SwaggerHeaderFilter
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowCredentials: false
+            allowedOriginPatterns: '*'
+            allowedHeaders: '*'
+            allowedMethods: '*'
+            allowedOrigins: '*'
+      loadbalancer:
+        use404: true
+      routes:
+        - id: auth-server
+          predicates:
+            - Path=/auth/**
+          uri: lb://auth-server
+        - id: system-settings-server
+          predicates:
+            - Path=/system/**
+          uri: lb://system-settings-server
